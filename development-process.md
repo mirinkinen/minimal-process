@@ -14,7 +14,7 @@ More commonly, these steps are written in the following format
 2. Implement the solution
 3. Test the solution
 4. Deploy the solution into production
-5. Monitor availability and performance
+5. Monitor the application (availability, performance, ...)
 
 If we release code AS IS and don't provide any support for it, only the first two steps are required. But when someone is paying for us to implement and maintain the software, all the five steps are required.
 
@@ -28,7 +28,7 @@ To easily spot the need for this kind of change, **we need to make progress in v
 
 From the viewpoint of software architecture, our software needs to be modular for us to easily change individual modules without affecting the rest of the system. This can achieved by following good design and coding practices like [SOLID](https://en.wikipedia.org/wiki/SOLID).
 
-From the viewpoint of writing code, we need robust versioning control system, like [git](https://git-scm.com/), which makes it easy to travel back in time in code changes.
+From the viewpoint of writing code, we need robust versioning control system, like [git](https://git-scm.com/), which makes it easier to handle concurrent work done by multiple developers with a possiblity to travel back in time when we need to.
 
 ## User Stories
 
@@ -44,7 +44,7 @@ User stories must have acceptance criteria that specifies when the story is comp
 
 As the solution is formed incrementally, the code is implemented in small batches and synchronized with others continuously. This ensures that when code conflicts happen due to concurrent changes to the same file, we minimize the time to notice it. The most fool-proof way to detect these types of problems is to frequently synchronize the code, ideally multiple times per day.
 
-## Fast Feedback
+## Commit Stage
 
 When publishing code to others, we want fast feedback for the quality of our latest addition. This can be achieved by creating automated code pipeline. The pipeline is triggered each time code is being commited to the versioning control system and it verifies that the software builds and all the unit tests pass. 
 
@@ -77,6 +77,25 @@ Even the generation of release notes can be automated, because every deployment 
 ## Monitoring
 
 It is crucial that the software deployed is usable at all times, unless otherwise defined. If the software is not available, all the previous efforts put in would be rendered useless. In order to ensure that production problems are promptly addressed, it is important to have a system in place that alerts us when issues arise. This necessitates automated monitoring and, even more importantly, an automated warning system that notifies us when problems occur. This way, we can react quickly to resolve the issues and minimize any potential disruptions to the system.
+
+## The Process in Practice
+
+The mimimal software development process can be illustrated in the following way.
+
+![Acceptance Stage](iteration.drawio.png)
+
+1. Everything starts with requirements.
+2. Implementation is made following the requirements and their acceptance criteria.
+   - Notice that some monitoring solutions can be implemented using Infrastructure as Code, which means that monitoring process is not totally separate from the development process.
+3. Automation tests are written to proof that the implementation actually works as acceptance criteria dictates.
+   - Notice that some tests can be written before the actual code, if Test-Driven Development process is being followed!
+4. Code commit triggers the commit stage.
+   - This is where all the fast unit tests are executed.
+5. After successful commit stage, acceptance stage is automatically triggered.
+   - This executes all the other tests that were not executed in the commit stage.
+6. After successful acceptance stage, the software can be automatically deployed to production if Continuous Deployment is being applied.
+
+This is the fundamental idea behind agile software development. In Scrum, the iteration (or sprint) is usually two weeks long. So as long as you are able to deploy at the end of the sprint, you are basically following Scrum. This doesn't mean that the iteration have to be that long. The smallest iteration length could be the time that takes you to fix one line of code with with a unit test to verify the fix. Then add the time of your CI/CD pipeline to the total time and it might be even under an hour! Now that's agile! This is the minimal software process development in a nutshell.
 
 ## References
 
